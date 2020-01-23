@@ -26,7 +26,7 @@ pub struct Param {
 }
 
 impl Param {
-	fn true_type(&self) -> ParamType {
+	pub fn true_type(&self) -> ParamType {
 		match self.kind {
 			ParamType::Address => self.kind.clone(),
 			ParamType::Bytes => self.kind.clone(),
@@ -44,7 +44,7 @@ impl Param {
 			    if tuple_array {
 				let mut temp_types = Vec::new();
 				for component in self.components.iter() {
-				    temp_types.push(type_check(component));
+				    temp_types.push(component.true_type());
 				}
 				types = Box::new(ParamType::Tuple(temp_types));
 			    } else {
@@ -75,7 +75,7 @@ impl Param {
 			}
 			ParamType::Tuple(ref tokens) => {
 			    let mut types = Vec::new();
-			    for component in param_type.components.iter() {
+			    for component in self.components.iter() {
 				types.push(component.true_type());
 			    }
 			    ParamType::Tuple(types)
